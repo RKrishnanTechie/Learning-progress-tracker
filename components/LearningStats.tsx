@@ -21,7 +21,7 @@ async function getCombinedStats() {
       const completedCourses = courses.filter((course: Course) => course.status === 'completed').length;
       
       const totalApplications = jobs.length;
-      const thisWeekApplications = jobs.filter((job: any) => {
+      const thisWeekApplications = jobs.filter((job: { dateApplied: string }) => {
         const jobDate = new Date(job.dateApplied);
         const weekAgo = new Date();
         weekAgo.setDate(weekAgo.getDate() - 7);

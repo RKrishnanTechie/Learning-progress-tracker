@@ -39,7 +39,7 @@ export function DailyGoals() {
         
         if (result.success) {
           const today = new Date().toISOString().split('T')[0];
-          const todaysJobs = result.data.filter((job: any) => job.dateApplied === today);
+          const todaysJobs = result.data.filter((job: { dateApplied: string }) => job.dateApplied === today);
           setJobsAppliedToday(todaysJobs.length);
         }
       } catch (error) {
@@ -56,7 +56,7 @@ export function DailyGoals() {
   return (
     <>
       <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Today's Goals</h2>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">Today&apos;s Goals`</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Learning Goal */}
