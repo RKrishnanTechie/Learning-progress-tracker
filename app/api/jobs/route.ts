@@ -32,7 +32,8 @@ export async function GET() {
       success: true, 
       data: jobs 
     });
-  } catch (_error) {
+  } catch (error) {
+    console.error('Failed to read jobs:', error);
     return NextResponse.json(
       { success: false, message: 'Failed to read jobs' },
       { status: 500 }
@@ -66,7 +67,8 @@ export async function POST(request: Request) {
       success: true, 
       data: newJob 
     });
-  } catch (_error) {
+  } catch (error) {
+    console.error('Failed to create job application:', error);
     return NextResponse.json(
       { success: false, message: 'Failed to create job application' },
       { status: 500 }

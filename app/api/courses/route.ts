@@ -34,7 +34,8 @@ export async function GET() {
       success: true, 
       data: courses 
     });
-  } catch (_error) {
+  } catch (error) {
+    console.error('Failed to read courses:', error);
     return NextResponse.json(
       { success: false, message: 'Failed to read courses' },
       { status: 500 }
@@ -65,7 +66,8 @@ export async function POST(request: Request) {
       success: true, 
       data: newCourse 
     });
-  } catch (_error) {
+  } catch (error) {
+    console.error('Failed to create courses:', error);
     return NextResponse.json(
       { success: false, message: 'Failed to create course' },
       { status: 500 }
