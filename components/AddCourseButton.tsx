@@ -1,3 +1,4 @@
+// This is just a dummy component to understand client component
 'use client';
 
 import { useState } from 'react';

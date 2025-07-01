@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "company": "Keystone Education Group",
+    "position": "Frontend Developer",
+    "dateApplied": "2025-07-01",
+    "followUpDate": "2025-07-04",
+    "followedUp": false,
+    "status": "applied",
+    "notes": "Completed an Intro session with Sarpreet and first interview has been scheduled"
+  }
+]

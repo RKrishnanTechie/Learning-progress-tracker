@@ -1,48 +1,74 @@
 import { NextResponse } from 'next/server';
+import fs from 'fs/promises';
+import path from 'path';
+import { Course } from '@/types';
 
-// Sample course data (we'll make this dynamic later)
-const courses = [
-  {
-    id: 1,
-    title: "Next.js Fundamentals",
-    description: "Learning Next.js for job interview",
-    hours: 30,
-    completed: 8,
-    status: "in-progress"
-  },
-  {
-    id: 2,
-    title: "TypeScript Basics",
-    description: "Mastering TypeScript fundamentals",
-    hours: 20,
-    completed: 20,
-    status: "completed"
+const dataFilePath = path.join(process.cwd(), 'data', 'courses.json');
+
+// Helper function to read courses from file
+async function readCourses() {
+  try {
+    const fileContent = await fs.readFile(dataFilePath, 'utf-8');
+    return JSON.parse(fileContent);
+  } catch (error) {
+    console.error('Error reading courses file:', error);
+    return [];
   }
-];
+}
+
+// Helper function to write courses to file
+async function writeCourses(courses: Course[]) {
+  try {
+    await fs.writeFile(dataFilePath, JSON.stringify(courses, null, 2));
+  } catch (error) {
+    console.error('Error writing courses file:', error);
+    throw error;
+  }
+}
 
 // GET /api/courses
 export async function GET() {
-  return NextResponse.json({ 
-    success: true, 
-    data: courses 
-  });
+  try {
+    const courses = await readCourses();
+    return NextResponse.json({ 
+      success: true, 
+      data: courses 
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: 'Failed to read courses' },
+      { status: 500 }
+    );
+  }
 }
 
 // POST /api/courses  
 export async function POST(request: Request) {
-  const body = await request.json();
-  
-  const newCourse = {
-    id: courses.length + 1,
-    ...body,     // shallow copy for new object
-    completed: 0,
-    status: "not-started"
-  };
-  
-  courses.push(newCourse);
-  
-  return NextResponse.json({ 
-    success: true, 
-    data: newCourse 
-  });
+  try {
+    const body = await request.json();
+    const courses = await readCourses();
+    
+    // Generate new ID
+    const newId = courses.length > 0 ? Math.max(...courses.map((c: Course) => c.id)) + 1 : 1;
+    
+    const newCourse = {
+      id: newId,
+      ...body,
+      completed: 0,
+      status: "not-started"
+    };
+    
+    courses.push(newCourse);
+    await writeCourses(courses);
+    
+    return NextResponse.json({ 
+      success: true, 
+      data: newCourse 
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: 'Failed to create course' },
+      { status: 500 }
+    );
+  }
 }
